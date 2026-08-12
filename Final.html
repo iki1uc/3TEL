@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>3TEL – Final Output</title>
+<style>
+body { background:#000; color:#0f0; font-family:monospace; padding:40px; }
+h1 { color:#6cf; }
+pre { background:#111; padding:20px; border-left:3px solid #6cf; }
+</style>
+</head>
+
+<body>
+<h1>3TEL – Final GEO & Physik</h1>
+
+<pre id="out">Lade 3TEL…</pre>
+
+<script type="module">
+import { TEL3_RESPO } from "./3TEL.respo.js";
+
+document.getElementById("out").innerText =
+  TEL3_RESPO.speak("arg xarg 3te sync 4tel");
+</script>
+
+</body>
+</html>
