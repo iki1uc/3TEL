@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>3TEL – PX‑Gate Animation</title>
+<style>
+body { background:#000; color:#0f0; font-family:monospace; }
+#anim { font-size:32px; text-align:center; margin-top:100px; }
+</style>
+</head>
+
+<body>
+
+<div id="anim">PX‑Gate lädt…</div>
+
+<script type="module">
+import { TEL3 } from "./3TEL.js";
+
+const tri = TEL3.tri("PER");
+
+let i = 0;
+setInterval(() => {
+  document.getElementById("anim").innerText = tri[i];
+  i = (i + 1) % tri.length;
+}, 600);
+</script>
+
+</body>
+</html>
