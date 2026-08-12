@@ -1,0 +1,52 @@
+// 3TEL.pipe.js
+import { TEL3 } from "./3TEL.js";
+
+export const TEL3_PIPE = {
+  id: "3TEL.pipe",
+  mode: "tri-transfer",
+  status: "active",
+
+  run(entry) {
+    const tri = TEL3.split(entry);
+
+    const geo = this.geo(tri);
+    const physik = this.physik(geo);
+
+    return {
+      entry,
+      tri,
+      geo,
+      physik,
+      gamma: this.gamma(geo)
+    };
+  },
+
+  geo(tri) {
+    const base = 3;
+    const factor = tri.fullsync.factor;
+
+    return {
+      alpha: base * factor,
+      beta: base * 2 * factor,
+      gamma: base * 3 * factor,
+      delta: base * 0.5 * factor
+    };
+  },
+
+  physik(geo) {
+    return {
+      energie: geo.alpha * 9.81,
+      impuls: geo.beta * geo.gamma,
+      feld: geo.delta * 42
+    };
+  },
+
+  gamma(geo) {
+    const sum = geo.alpha + geo.beta + geo.gamma + geo.delta;
+    return {
+      value: sum >= 24 ? 9 : sum >= 18 ? 6 : 3,
+      percent: (sum / 27) * 100,
+      degree: 360 * (sum / 27)
+    };
+  }
+};
