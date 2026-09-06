@@ -1,11 +1,12 @@
-// 3TEL.pipe.js
+// 3TEL.pipe.nano.js
 import { TEL3 } from "./3TEL.js";
 
 export const TEL3_PIPE = {
-  id: "3TEL.pipe",
-  mode: "tri-synthesis",
+  id: "3TEL.pipe.nano",
+  mode: "tri-synthesis-nano",
   status: "active",
 
+  // Hauptlauf: 3TEL → 4TEL → GEO.nano → PHYSIK.nano
   run(segment) {
     const tri = TEL3.tri(segment);
     const quad = TEL3.quad(tri);
@@ -16,19 +17,38 @@ export const TEL3_PIPE = {
     return { segment, tri, quad, geo, physik };
   },
 
+  // Atomare Nano-Mapping-Funktion
+  nano(symbol) {
+    const map = {
+      "3":    3.0003,
+      "9":    9.009,
+      "◎":   81.081,
+      "◉":   27.027,
+      "△":   42.042,
+      "▣":   56.056,
+      "◆":   72.072,
+      "756": 756.756,
+      "81":  81.081,
+      "27":  27.027
+    };
+    return map[symbol] || 0.0001;
+  },
+
+  // Atomare GEO-Schicht
   geo(tri) {
     return {
-      alpha: tri[0] === "3" ? 3 : 9,
-      beta:  tri[1] === "9" ? 9 : 81,
-      gamma: tri[2] === "◎" ? 81 : 27
+      alpha: this.nano(tri[0]),
+      beta:  this.nano(tri[1]),
+      gamma: this.nano(tri[2])
     };
   },
 
+  // Atomare PHYSIK-Schicht
   physik(geo) {
     return {
-      energie: geo.alpha * 9.81,
-      impuls: geo.beta * geo.gamma,
-      feld: geo.gamma * 42
+      energie: geo.alpha * 9.81 * 0.003,
+      impuls:  (geo.beta * geo.gamma) ** 0.3,
+      feld:    Math.log(geo.gamma + 1) * 42.42
     };
   }
 };
