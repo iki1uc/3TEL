@@ -5,8 +5,14 @@ export const Persona = {
     active: Meier, // Standard
 
     set(name) {
-        if (name === "meier") this.active = Meier;
-        if (name === "schulz") this.active = Schulz;
+        const key = name.toLowerCase();
+
+        if (key === "meier") this.active = Meier;
+        if (key === "schulz") this.active = Schulz;
+
+        // ja/nein = toggeln
+        if (key === "ja") this.active = Meier;
+        if (key === "nein") this.active = Schulz;
     },
 
     getTriKey() {
