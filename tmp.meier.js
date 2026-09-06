@@ -6,3 +6,8 @@ export const Meier = {
         return `[Meier]: ${msg}`;
     }
 };
+export const Meier = {
+    name: "Meier",
+    triKey: "PER",
+    prefix: "[Meier] "
+};
