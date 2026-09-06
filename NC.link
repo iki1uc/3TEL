@@ -1,17 +1,39 @@
+// NC.link.diamant.js (offen)
 export const LINK = {
-    modules: {},
+    id: "NC.link.diamant",
+    mode: "open-diamond",
+    status: "active",
 
-    bind(name, ref) {
-        this.modules[name] = ref;
+    core: null,          // Diamant-Kernpunkt
+    axes: {},            // offene Achsen
+    modules: {},         // Bindbare Module
+
+    // Bindet ein Modul an eine Achse oder direkt an den Kern
+    bind(name, ref, axis = null) {
+        if (axis) {
+            if (!this.axes[axis]) this.axes[axis] = {};
+            this.axes[axis][name] = ref;
+        } else {
+            this.modules[name] = ref;
+        }
     },
 
+    // Setzt den Diamant-Kernpunkt
+    setCore(ref) {
+        this.core = ref;
+    },
+
+    // Offener Diamant-Sync: keine Matrix, nur Achsen + Kern
     fullSync(packet) {
         const out = {
             time: Date.now(),
             packet,
-            sync: true
+            core: this.core,
+            axes: Object.keys(this.axes),
+            sync: "open-diamond"
         };
-        console.log("[NC.link FullSync] →", out);
+
+        console.log("[NC.link OPEN DIAMOND] →", out);
         return out;
     }
 };
