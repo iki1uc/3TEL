@@ -1,26 +1,40 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<title>3TEL – Final GEO & Physik</title>
-<style>
-body { background:#000; color:#0f0; font-family:monospace; padding:40px; }
-h1 { color:#6cf; }
-pre { background:#111; padding:20px; border-left:3px solid #6cf; }
-</style>
-</head>
+// 3TEL.respo.nano.js
+import { TEL3_PIPE } from "./3TEL.pipe.nano.js";
 
-<body>
-<h1>3TEL – Final GEO & Physik</h1>
+export const TEL3_RESPO = {
+  id: "3TEL.respo.nano",
+  mode: "response-nano",
+  status: "active",
 
-<pre id="out">Lade 3TEL…</pre>
+  speak(segment) {
+    const out = TEL3_PIPE.run(segment);
 
-<script type="module">
-import { TEL3_RESPO } from "./3TEL.respo.js";
+    const triLine  = out.tri.join(" → ");
+    const quadLine = out.quad;
 
-document.getElementById("out").innerText =
-  TEL3_RESPO.speak("PER");
-</script>
+    const geoA = out.geo.alpha.toFixed(6);
+    const geoB = out.geo.beta.toFixed(6);
+    const geoC = out.geo.gamma.toFixed(6);
 
-</body>
-</html>
+    const e = out.physik.energie.toFixed(6);
+    const p = out.physik.impuls.toFixed(6);
+    const f = out.physik.feld.toFixed(6);
+
+    return (
+`Segment: ${segment}
+
+3TEL: ${triLine}
+4TEL: ${quadLine}
+
+GEO.nano:
+α=${geoA}
+β=${geoB}
+γ=${geoC}
+
+Physik.nano:
+Energie=${e}
+Impuls=${p}
+Feld=${f}`
+    );
+  }
+};
