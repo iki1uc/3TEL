@@ -3,795 +3,609 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>3TEL · QUEST · ALLE ZAHLEN · EXTRAKTOR</title>
-
+<title>🧿 RESPO · WORKBOARD · 3‑9‑27‑81‑243‑729</title>
 <style>
-:root {
-    --bg: #0a0a0f;
-    --fg: #0f0;
-    --gold: #ffd700;
-    --l1: #ff6b6b;
-    --l2: #6bff6b;
-    --l3: #6b6bff;
-    --l4: #ffd93d;
-    --l5: #ff44ff;
-    --l6: #6cf;
-    --l7: #ff8c00;
-    --err: #ff3333;
-    --warn: #ffaa00;
-    --ok: #44ff44;
-}
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-    background: var(--bg);
-    color: var(--fg);
-    font-family: 'Consolas', monospace;
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: radial-gradient(ellipse at 20% 30%, #0a0e1a, #000000);
     min-height: 100vh;
-    overflow: hidden;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    gap: 4px;
-    padding: 8px;
-}
+    font-family: 'Segoe UI', 'Consolas', monospace;
+    color: #c0d0d0;
+    padding: 16px;
+  }
+  .container {
+    max-width: 1500px;
+    margin: 0 auto;
+    background: rgba(6,8,16,0.6);
+    backdrop-filter: blur(4px);
+    border-radius: 32px;
+    padding: 20px 26px 28px;
+    border: 1px solid rgba(160,200,240,0.05);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.9), inset 0 0 80px rgba(100,180,255,0.02);
+  }
 
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px solid var(--gold);
-    padding-bottom: 4px;
-    flex-wrap: wrap;
-    gap: 4px;
-}
-header h1 {
-    font-size: 13px;
-    color: var(--gold);
-    letter-spacing: 2px;
-}
-header h1 .quest { color: var(--l4); }
-header h1 .num { color: var(--l1); }
-header h1 .ext { color: var(--l2); }
-#info-bar { font-size: 8px; color: #666; display: flex; gap: 6px; align-items: center; }
+  header {
+    display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center;
+    border-bottom:1px solid rgba(160,200,240,0.06); padding-bottom:10px; margin-bottom:16px;
+  }
+  header h1 {
+    font-size: 22px; font-weight:300; letter-spacing:3px;
+    background: linear-gradient(135deg,#e0e8f0,#b0c8d8,#8098b0,#c0d8e8,#b388ff);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    display:flex; align-items:center; gap:10px;
+  }
+  header h1 small { font-size:11px; letter-spacing:2px; -webkit-text-fill-color:#4a5a6a; color:#4a5a6a; }
+  .status-leds { display:flex; gap:16px; font-size:11px; color:#5a7a8a; flex-wrap:wrap; }
+  .status-leds span { display:flex; align-items:center; gap:5px; }
+  .led { display:inline-block; width:9px; height:9px; border-radius:50%; background:#2a4a5a; transition:.3s; }
+  .led.on { background:#8cf0d0; box-shadow:0 0 12px #8cf0d0; }
+  .led.pulse { background:#f0d080; animation:pulse 1.2s infinite; }
+  .led.off { background:#2a4a5a; }
+  @keyframes pulse { 0%,100%{opacity:.4;transform:scale(.8)} 50%{opacity:1;transform:scale(1.2)} }
 
-main {
-    display: grid;
-    grid-template-columns: 3fr 1.2fr;
-    gap: 4px;
-    height: 100%;
-    min-height: 0;
-}
+  .controls {
+    display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+    background: rgba(0,0,0,0.2); border-radius:16px; padding:10px 14px; margin-bottom:14px;
+    border:1px solid rgba(100,180,255,0.03);
+  }
+  .controls input {
+    background: rgba(20,28,36,0.5); border:1px solid rgba(120,160,190,0.1);
+    color:#d0e0e8; padding:6px 12px; border-radius:20px; font-size:12px; font-family:inherit;
+  }
+  .controls input::placeholder { color:#4a5a6a; }
+  .controls label { font-size:10px; color:#5a7a8a; }
+  .controls .grow { flex:1; min-width:120px; }
 
-#canvas-wrap {
-    background: #0a0a0f;
-    border: 1px solid #1a1a2a;
-    border-radius: 8px;
-    padding: 4px;
-    position: relative;
-    overflow: hidden;
-}
-#canvas-wrap canvas {
-    width: 100%;
-    height: 100%;
-    border-radius: 4px;
-    display: block;
-}
-#canvas-overlay {
-    position: absolute;
-    bottom: 8px;
-    left: 8px;
-    font-size: 7px;
-    color: #444;
-    pointer-events: none;
-    background: rgba(0,0,0,0.7);
-    padding: 3px 8px;
-    border-radius: 3px;
-}
-#canvas-overlay .ok { color: var(--ok); }
-#canvas-overlay .num { color: var(--l1); }
+  .tier-wrap {
+    background: rgba(0,0,0,0.2); border-radius:16px; padding:12px 16px; margin-bottom:14px;
+    border:1px solid rgba(179,136,255,0.05);
+  }
+  .tier-wrap h3 { font-size:11px; color:#b388ff; letter-spacing:2px; margin-bottom:8px; }
+  .tier-track { display:flex; align-items:center; gap:4px; flex-wrap:wrap; }
+  .tier-step {
+    flex:1; min-width:60px; text-align:center; padding:6px 4px; border-radius:10px;
+    background: rgba(20,28,36,0.4); border:1px solid rgba(120,160,190,0.06);
+    font-size:11px; color:#5a7a8a; cursor:pointer; transition:.2s;
+  }
+  .tier-step:hover { border-color:rgba(179,136,255,0.3); color:#d0c0f8; }
+  .tier-step .num { font-size:15px; font-weight:bold; display:block; color:#9ab0c0; }
+  .tier-step.reached { border-color:#8cf0d0; }
+  .tier-step.reached .num { color:#8cf0d0; }
+  .tier-step.current { border-color:#f0d080; box-shadow:0 0 16px rgba(240,208,128,0.15); }
+  .tier-step.current .num { color:#f0d080; }
+  .tier-arrow { color:#2a3a4a; font-size:12px; }
+  .tier-info { margin-top:6px; font-size:10px; color:#5a7a8a; text-align:center; }
 
-#panel {
-    background: #0a0a0f;
-    border: 1px solid #1a1a2a;
-    border-radius: 8px;
-    padding: 4px;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    overflow-y: auto;
-    max-height: 100%;
-    font-size: 8px;
-}
-#panel h3 { font-size: 8px; color: #666; border-bottom: 1px solid #1a1a2a; padding-bottom: 2px; }
+  .main-grid { display:grid; grid-template-columns: 2.2fr 1fr; gap:18px; }
+  @media (max-width: 1050px) { .main-grid { grid-template-columns: 1fr; } }
 
-#log {
-    flex: 1;
-    overflow-y: auto;
-    font-size: 7px;
-    color: #6a6a8a;
-    line-height: 1.2;
-    min-height: 30px;
-    max-height: 60px;
-    background: #06060a;
-    border-radius: 3px;
-    padding: 2px 4px;
-}
-#log .entry { padding: 1px 0; border-bottom: 1px solid #0a0a12; }
-#log .time { color: #444; }
-#log .msg.ok { color: var(--ok); }
-#log .msg.num { color: var(--l1); }
-#log .msg.ext { color: var(--l2); }
+  .repo-panel, .board-panel {
+    background: rgba(0,0,0,0.2); border-radius:20px; padding:14px 16px;
+    border:1px solid rgba(100,180,255,0.03);
+  }
+  .repo-panel h3, .board-panel h3 {
+    font-size:12px; color:#f0d080; letter-spacing:2px; border-bottom:1px solid rgba(255,215,0,0.04);
+    padding-bottom:4px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;
+  }
+  .repo-panel h3 span, .board-panel h3 span { color:#5a7a8a; font-weight:normal; font-size:10px; }
 
-#metrics {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 2px;
-}
-.metric {
-    background: #0e0e1a;
-    border-radius: 3px;
-    padding: 2px 3px;
-    text-align: center;
-    border: 1px solid #1a1a2a;
-}
-.metric .label { color: #666; font-size: 5px; text-transform: uppercase; }
-.metric .value { font-size: 9px; font-weight: bold; }
-.metric.num .value { color: var(--l1); }
-.metric.ext .value { color: var(--l2); }
-.metric.quest .value { color: var(--l4); }
+  .repo-grid {
+    display:grid; grid-template-columns: repeat(auto-fill, minmax(120px,1fr)); gap:8px;
+    max-height: 560px; overflow-y:auto; padding-right:4px;
+  }
+  .repo-tile {
+    position:relative; background: rgba(10,14,20,0.5); border:1px solid rgba(100,180,255,0.06);
+    border-radius:12px; padding:8px 8px 6px; cursor:pointer; transition:all .2s;
+  }
+  .repo-tile:hover { transform:translateY(-2px); border-color:rgba(160,200,240,0.15); }
+  .repo-tile.selected { border-color:#f0d080; box-shadow:0 0 14px rgba(240,208,128,0.12); }
+  .repo-tile .chk {
+    position:absolute; top:5px; right:6px; width:14px; height:14px; border-radius:4px;
+    border:1px solid rgba(160,200,240,0.2); background:rgba(0,0,0,0.3); font-size:10px;
+    display:flex; align-items:center; justify-content:center; color:#f0d080;
+  }
+  .repo-tile.selected .chk { background:#f0d080; color:#0a0e1a; }
+  .repo-tile .name {
+    font-size:10.5px; font-weight:600; color:#d0e0e8; word-break:break-word; padding-right:16px;
+    line-height:1.25;
+  }
+  .repo-tile .meta { font-size:8px; color:#4a5a6a; margin-top:4px; }
+  .repo-tile .dot { display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:4px; vertical-align:middle; }
+  .repo-tile .dot.gruen { background:#8cf0d0; box-shadow:0 0 6px #8cf0d0; }
+  .repo-tile .dot.gelb { background:#f0d080; box-shadow:0 0 6px #f0d080; }
+  .repo-tile .dot.rot { background:#ff6b6b; box-shadow:0 0 6px #ff6b6b; }
+  .repo-tile .badge-plan {
+    font-size:7px; color:#b388ff; border:1px solid rgba(179,136,255,0.3); border-radius:8px;
+    padding:0 5px; display:inline-block; margin-top:3px;
+  }
+  .repo-tile a { color:#70c8ff; font-size:8px; text-decoration:none; display:block; margin-top:2px; }
 
-#controls {
-    display: flex;
-    gap: 2px;
-    flex-wrap: wrap;
-}
-button {
-    background: #111;
-    color: var(--fg);
-    border: 1px solid #333;
-    padding: 2px 6px;
-    border-radius: 2px;
-    cursor: pointer;
-    font-family: inherit;
-    font-size: 7px;
-    transition: all 0.2s;
-}
-button:hover { background: #1a1a2a; border-color: var(--gold); }
-button:active { transform: scale(0.95); }
-button.primary { border-color: var(--gold); color: var(--gold); }
-button.primary:hover { background: var(--gold); color: #000; }
-button.quest { border-color: var(--l4); color: var(--l4); }
-button.quest:hover { background: var(--l4); color: #000; }
-button.danger { border-color: var(--err); color: var(--err); }
-button.danger:hover { background: var(--err); color: #000; }
+  .board-panel { display:flex; flex-direction:column; gap:10px; }
+  .quick-select { display:flex; flex-wrap:wrap; gap:5px; }
+  .quick-select button { flex:1; min-width:44px; }
+  .board-list { max-height:220px; overflow-y:auto; }
+  .board-chip {
+    display:flex; justify-content:space-between; align-items:center; gap:6px;
+    background: rgba(20,28,36,0.4); border:1px solid rgba(100,180,255,0.05);
+    border-radius:10px; padding:5px 10px; font-size:10px; margin-bottom:5px; color:#d0e0e8;
+  }
+  .board-chip button.rm { border:none; background:none; color:#d06060; font-size:12px; padding:0 4px; cursor:pointer; }
 
-@media (max-width: 800px) {
-    main { grid-template-columns: 1fr; }
-    #panel { max-height: 180px; }
-}
+  .plan-add { display:flex; gap:6px; }
+  .plan-add input { flex:1; }
+
+  .btn-row { display:flex; flex-wrap:wrap; gap:5px; }
+  button {
+    background: rgba(20,28,36,0.4); border:1px solid rgba(120,160,190,0.06); color:#9ab0c0;
+    padding:5px 12px; border-radius:18px; font-size:10px; font-family:inherit; cursor:pointer; transition:.2s;
+  }
+  button:hover { background:rgba(40,70,90,0.2); border-color:rgba(160,200,240,0.1); color:#d0e8f8; }
+  button.primary { border-color:rgba(255,215,0,0.1); color:#f0d080; }
+  button.primary:hover { background:rgba(255,215,0,0.04); }
+  button.tier { border-color:rgba(179,136,255,0.15); color:#b388ff; }
+  button.tier:hover { background:rgba(179,136,255,0.06); }
+  button.danger { border-color:rgba(255,80,80,0.08); color:#d06060; }
+  button.danger:hover { background:rgba(255,80,80,0.04); }
+
+  .log-box {
+    background: rgba(0,0,0,0.25); border-radius:10px; padding:6px 12px; font-size:9px; color:#4a5a6a;
+    max-height:80px; overflow-y:auto; line-height:1.5; border:1px solid rgba(100,180,255,0.02);
+    margin-top:14px; font-family:'Consolas', monospace;
+  }
+  .log-box .entry { border-bottom:1px solid rgba(100,180,255,0.02); padding:1px 0; }
+  .log-box .time { color:#2a3a4a; }
+  .log-box .msg { color:#8ab0c0; }
+  .log-box .msg.ok { color:#8cf0d0; }
+  .log-box .msg.warn { color:#f0d080; }
+  .log-box .msg.err { color:#ff6b6b; }
+
+  .footer {
+    display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:12px;
+    padding:6px 12px; background:rgba(0,0,0,0.15); border-radius:12px;
+    border:1px solid rgba(100,180,255,0.02); font-size:9px; color:#3a4a5a;
+  }
+  .footer .gold { color:#f0d080; }
+  .footer .stat { display:flex; align-items:center; gap:4px; }
+
+  ::-webkit-scrollbar { width:4px; }
+  ::-webkit-scrollbar-track { background:#080c12; }
+  ::-webkit-scrollbar-thumb { background:#1a2a3a; border-radius:4px; }
 </style>
 </head>
-
 <body>
 
-<header>
-    <h1>
-        <span class="quest">◈ 3TEL</span>
-        <span style="color:#666;">·</span>
-        <span class="num">🔢 QUEST</span>
-        <span style="color:#666;">·</span>
-        <span class="ext">⚡ EXTRAKTOR</span>
-    </h1>
-    <div id="info-bar">
-        <span id="clock">⏱️ --:--:--</span>
-        <span id="state-display" style="color:var(--gold);">● bereit</span>
-        <span id="cycle-display" style="color:#666;">QUEST 0</span>
+<div class="container">
+
+  <header>
+    <h1>🧿 RESPO · WORKBOARD <small>3 · 9 · 27 · 81 · 243 · 729</small></h1>
+    <div class="status-leds">
+      <span><span class="led on" id="ledSystem"></span> SYSTEM</span>
+      <span><span class="led" id="ledApi"></span> GITHUB</span>
+      <span><span class="led" id="ledBoard"></span> WORKBOARD</span>
     </div>
-</header>
+  </header>
 
-<main>
-    <div id="canvas-wrap">
-        <canvas id="questCanvas"></canvas>
-        <div id="canvas-overlay">
-            <span class="ok">●</span> 3TEL · <span class="num">🔢</span> Alle Zahlen extrahiert
-        </div>
+  <div class="controls">
+    <label>GitHub-User</label>
+    <input type="text" id="inputUser" value="iki1uc" placeholder="Benutzername">
+    <label>Token (optional, für private Repos)</label>
+    <input type="password" id="inputToken" class="grow" placeholder="Personal Access Token">
+    <button class="primary" id="btnLoad">⬇ Laden</button>
+    <input type="text" id="inputFilter" placeholder="🔎 Filter nach Name…">
+    <span id="repoCountLabel" style="font-size:10px;color:#5a7a8a;">0 Repos geladen</span>
+  </div>
+
+  <div class="tier-wrap">
+    <h3>🌀 STUFENLEITER · KLICK = SCHNELLAUSWAHL (neueste zuerst)</h3>
+    <div class="tier-track" id="tierTrack"></div>
+    <div class="tier-info" id="tierInfo">0 ausgewählt</div>
+  </div>
+
+  <div class="main-grid">
+
+    <div class="repo-panel">
+      <h3>🔷 ALLE REPOS <span id="repoPanelSub">(GitHub + geplant)</span></h3>
+      <div class="repo-grid" id="repoGrid"></div>
     </div>
 
-    <div id="panel">
-        <h3>📊 ALLE ZAHLEN · 3TEL-QUEST</h3>
+    <div class="board-panel">
+      <h3>🔗 ZUSAMMENARBEIT <span id="boardCountLabel">0 im Board</span></h3>
 
-        <div id="metrics">
-            <div class="metric num"><div class="label">3TEL</div><div class="value" id="tel3-value">0</div></div>
-            <div class="metric ext"><div class="label">4TEL</div><div class="value" id="tel4-value">0</div></div>
-            <div class="metric quest"><div class="label">QUEST</div><div class="value" id="quest-value">0</div></div>
-            <div class="metric num"><div class="label">φ</div><div class="value" id="phi-value">0.00</div></div>
-        </div>
+      <div class="quick-select" id="quickSelect"></div>
 
-        <div id="log">
-            <div class="entry"><span class="time">[INIT]</span> <span class="msg ok">◈ 3TEL · QUEST · EXTRAKTOR</span></div>
-            <div class="entry"><span class="time">[INIT]</span> <span class="msg num">ARG · XARG · ARG3TE → FullSync → 4TEL</span></div>
-            <div class="entry"><span class="time">[INIT]</span> <span class="msg ext">α, β, γ, δ · Energie, Impuls, Feld, Zentrumskraft</span></div>
-        </div>
+      <div class="plan-add">
+        <input type="text" id="inputPlan" placeholder="🕓 geplantes Repo hinzufügen…">
+        <button id="btnAddPlan">+ Hinzufügen</button>
+      </div>
 
-        <div id="controls">
-            <button class="primary" id="btn-start">▶ START</button>
-            <button class="quest" id="btn-quest">🔢 QUEST</button>
-            <button class="danger" id="btn-reset">⟲ RESET</button>
-            <button id="btn-auto">▶ AUTO</button>
-        </div>
+      <div class="board-list" id="boardList"></div>
+
+      <div class="btn-row">
+        <button id="btnExport">📋 Board als Liste kopieren</button>
+        <button class="danger" id="btnClearBoard">⟲ Auswahl leeren</button>
+      </div>
     </div>
-</main>
+
+  </div>
+
+  <div class="log-box" id="logBox">
+    <div class="entry"><span class="time">[INIT]</span> <span class="msg ok">🧿 RESPO-Workboard geladen</span></div>
+  </div>
+
+  <div class="footer">
+    <span class="stat"><span class="gold">★</span> RESPO · WORKBOARD · A81-FUSION</span>
+    <span class="stat">🔷 <span id="footerTotal">0</span> Repos gesamt</span>
+    <span class="stat">🔗 <span id="footerSelected">0</span> im Board</span>
+    <span class="stat">🌀 Stufe: <span id="footerTier">–</span></span>
+  </div>
+
+</div>
 
 <script>
-// ============================================================
-// 1. 3TEL · QUEST · EXTRAKTOR
-// ============================================================
+"use strict";
+/* ================================================================
+   RESPO · WORKBOARD
+   Struktur:
+     1. CONFIG    – Konstanten (Stufenleiter, Ampel-Schwellen)
+     2. STATE     – Repos, Auswahl, geplante Repos, Overrides
+     3. STORAGE   – localStorage laden/speichern
+     4. GITHUB    – Repos per API laden (mit Pagination)
+     5. AMPEL     – Status-Berechnung
+     6. RENDER    – Grid, Stufenleiter, Board, Log
+     7. STEUERUNG – Auswahl, Schnellauswahl, geplante Repos, Export
+     8. INIT
+   ================================================================ */
 
-// --- KONSTANTEN ---
-const PHI = 1.61803398875;
-const PHI_INV = 1 / PHI;
-
-// --- 3TEL-KERN ---
-const TEL3 = {
-    // Segmente
-    segments: {
-        HY:  ["◉","3","9","◎","81","3","↺"],
-        PE:  ["◉","9","◎","81","◆","△","▣"],
-        PER: ["3","9","81","◆","756","△","27","▣","3"],
-        TRANS:["◎","81","◆","△"],
-        WARB:["81","◆","△","27"],
-        KANAL:["756","△","27","▣"],
-        TMPa:["3","◎","27"],
-        TMPb:["9","81","▣"],
-        TMPg:["◆","756","△"]
-    },
-
-    // 3TEL = erste drei Elemente
-    tri: function(segment) {
-        const s = this.segments[segment] || this.segments.PER;
-        return s.slice(0, 3);
-    },
-
-    // 4TEL = 3TEL + ◎
-    quad: function(tri) {
-        return [...tri, '◎'];
-    },
-
-    // Alle Zahlen aus Segment extrahieren
-    extractNumbers: function(segment) {
-        const s = this.segments[segment] || this.segments.PER;
-        const numbers = s.filter(item => !isNaN(parseFloat(item)) && isFinite(item));
-        return numbers.map(Number);
-    },
-
-    // Alle Symbole aus Segment extrahieren
-    extractSymbols: function(segment) {
-        const s = this.segments[segment] || this.segments.PER;
-        return s.filter(item => isNaN(parseFloat(item)) || !isFinite(item));
-    }
+/* ---------------------------------------------------------------
+   1. CONFIG
+   --------------------------------------------------------------- */
+const CONFIG = {
+  TIERS: [3, 9, 27, 81, 243, 729],
+  AMPEL_GRUEN_TAGE: 7,
+  AMPEL_GELB_TAGE: 30,
+  STORAGE_KEY_OVERRIDES: 'respo_workboard_overrides',
+  STORAGE_KEY_SELECTED: 'respo_workboard_selected',
+  STORAGE_KEY_PLANNED: 'respo_workboard_planned',
+  LOG_MAX: 40
 };
 
-// --- GEO-Physik ---
-function geoPhysik(tri, quad) {
-    const map = {
-        '◉': 1, '3': 3, '9': 9, '◎': 1, '81': 81,
-        '◆': 7, '△': 11, '▣': 13, '27': 27, '756': 756
-    };
-
-    const alpha = map[tri[0]] || 1;
-    const beta = map[tri[1]] || 1;
-    const gamma = map[tri[2]] || 1;
-    const delta = map[quad[3]] || 1;
-
-    return {
-        alpha, beta, gamma, delta,
-        energie: alpha * 9.81,
-        impuls: beta * gamma,
-        feld: gamma * 42,
-        zentrumskraft: delta * 108
-    };
-}
-
-// --- VEKTEL ---
-function vektel(tri, quad) {
-    return {
-        v1: tri[0] || '◉',
-        v2: quad[quad.length - 1] || '▣',
-        v3: (tri[1] || '3') + '→' + (quad[2] || '81')
-    };
-}
-
-// ============================================================
-// 2. CANVAS SETUP
-// ============================================================
-const canvas = document.getElementById('questCanvas');
-const ctx = canvas.getContext('2d');
-let W, H, cx, cy, radius;
-
-function resizeCanvas() {
-    const wrap = document.getElementById('canvas-wrap');
-    const rect = wrap.getBoundingClientRect();
-    canvas.width = rect.width;
-    canvas.height = rect.height;
-    W = canvas.width; H = canvas.height;
-    cx = W / 2; cy = H / 2;
-    radius = Math.min(W, H) * 0.38;
-}
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
-
-// ============================================================
-// 3. STATE
-// ============================================================
+/* ---------------------------------------------------------------
+   2. STATE
+   --------------------------------------------------------------- */
 const state = {
-    running: false,
-    paused: false,
-    autoMode: false,
-    cycle: 0,
-    t: 0,
-
-    // Segment
-    segment: 'PER',
-    tri: ['3', '9', '81'],
-    quad: ['3', '9', '81', '◎'],
-
-    // Zahlen
-    numbers: [3, 9, 81, 756, 27],
-    symbols: ['◆', '△', '▣', '↺'],
-
-    // GEO-Physik
-    geo: { alpha: 3, beta: 9, gamma: 81, delta: 1 },
-    phys: { energie: 29.43, impuls: 729, feld: 3402, zentrumskraft: 108 },
-
-    // VEKTEL
-    vektel: { v1: '3', v2: '◎', v3: '9→81' },
-
-    // SYN/QUANT/RESPO
-    syn: 0.5,
-    quant: 0.5,
-    respo: 0.5,
-
-    // Quest-Zahlen
-    quest: 0
+  repos: [],
+  selected: new Set(),
+  overrides: {},
+  planned: []
 };
 
-// ============================================================
-// 4. LOG
-// ============================================================
-function log(msg, type = 'info') {
-    const logDiv = document.getElementById('log');
-    const entry = document.createElement('div');
-    entry.className = 'entry';
-    const time = new Date().toLocaleTimeString();
-    const cls = type === 'ok' ? 'ok' : type === 'num' ? 'num' : type === 'ext' ? 'ext' : '';
-    entry.innerHTML = `<span class="time">[${time}]</span> <span class="msg ${cls}">${msg}</span>`;
-    logDiv.appendChild(entry);
-    logDiv.scrollTop = logDiv.scrollHeight;
-    while (logDiv.children.length > 50) logDiv.removeChild(logDiv.firstChild);
+/* ---------------------------------------------------------------
+   3. STORAGE
+   --------------------------------------------------------------- */
+function loadStorage() {
+  try { state.overrides = JSON.parse(localStorage.getItem(CONFIG.STORAGE_KEY_OVERRIDES) || '{}'); } catch(_) { state.overrides = {}; }
+  try { state.selected = new Set(JSON.parse(localStorage.getItem(CONFIG.STORAGE_KEY_SELECTED) || '[]')); } catch(_) { state.selected = new Set(); }
+  try { state.planned = JSON.parse(localStorage.getItem(CONFIG.STORAGE_KEY_PLANNED) || '[]'); } catch(_) { state.planned = []; }
 }
+function saveOverrides() { localStorage.setItem(CONFIG.STORAGE_KEY_OVERRIDES, JSON.stringify(state.overrides)); }
+function saveSelected() { localStorage.setItem(CONFIG.STORAGE_KEY_SELECTED, JSON.stringify([...state.selected])); }
+function savePlanned() { localStorage.setItem(CONFIG.STORAGE_KEY_PLANNED, JSON.stringify(state.planned)); }
 
-// ============================================================
-// 5. 3TEL · QUEST
-// ============================================================
-
-function updateQuest(segment) {
-    // 3TEL
-    const tri = TEL3.tri(segment);
-    const quad = TEL3.quad(tri);
-    const numbers = TEL3.extractNumbers(segment);
-    const symbols = TEL3.extractSymbols(segment);
-
-    state.tri = tri;
-    state.quad = quad;
-    state.numbers = numbers;
-    state.symbols = symbols;
-
-    // GEO-Physik
-    const geo = geoPhysik(tri, quad);
-    state.geo = geo;
-    state.phys = {
-        energie: geo.energie,
-        impuls: geo.impuls,
-        feld: geo.feld,
-        zentrumskraft: geo.zentrumskraft
-    };
-
-    // VEKTEL
-    const vek = vektel(tri, quad);
-    state.vektel = vek;
-
-    // RESPO
-    state.respo = computeRespo(state.syn, state.quant);
-
-    // Quest-Zahl = Summe aller Zahlen
-    state.quest = numbers.reduce((a, b) => a + b, 0);
-
-    // Metriken
-    document.getElementById('tel3-value').textContent = tri.join(' ');
-    document.getElementById('tel4-value').textContent = quad.join(' ');
-    document.getElementById('quest-value').textContent = state.quest;
-    document.getElementById('phi-value').textContent = state.respo.toFixed(3);
-
-    log(`🔢 QUEST: ${segment} | Zahlen: ${numbers.join(', ')} | Summe: ${state.quest}`, 'num');
-    log(`📐 GEO: α=${geo.alpha} β=${geo.beta} γ=${geo.gamma} δ=${geo.delta}`, 'ext');
-}
-
-function computeRespo(syn, quant) {
-    return Math.min(1, (syn + quant) / PHI);
-}
-
-// ============================================================
-// 6. RENDER
-// ============================================================
-function render() {
-    if (state.paused) {
-        requestAnimationFrame(render);
-        return;
+/* ---------------------------------------------------------------
+   4. GITHUB: Repos laden (mit Pagination)
+   --------------------------------------------------------------- */
+async function fetchAllRepos(user, token) {
+  const repos = [];
+  let page = 1;
+  const headers = token ? { Authorization: `token ${token}` } : {};
+  document.getElementById('ledApi').className = 'led pulse';
+  while (true) {
+    const res = await fetch(`https://api.github.com/users/${encodeURIComponent(user)}/repos?per_page=100&page=${page}&sort=pushed`, { headers });
+    if (!res.ok) {
+      if (page === 1) throw new Error(`GitHub API Fehler: ${res.status}`);
+      break;
     }
-
-    ctx.clearRect(0, 0, W, H);
-
-    // Hintergrund
-    const grad = ctx.createRadialGradient(cx, cy, 10, cx, cy, W * 0.6);
-    grad.addColorStop(0, '#0a0a1a');
-    grad.addColorStop(1, '#000');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, W, H);
-
-    // 1. 3TEL-Segment
-    drawTel3();
-
-    // 2. Zahlen extrahieren
-    drawNumbers();
-
-    // 3. GEO-Physik
-    drawGeoPhysik();
-
-    // 4. RESPO-Kern
-    drawRespo();
-
-    // 5. SYN/QUANT
-    drawSynQuant();
-
-    // Update
-    state.t += 0.008;
-    if (state.running) {
-        state.cycle++;
-        state.syn = 0.5 + 0.4 * Math.sin(state.t * 0.3);
-        state.quant = 0.5 + 0.4 * Math.cos(state.t * 0.25);
-        state.respo = computeRespo(state.syn, state.quant);
-
-        // Alle 30 Zyklen neues Segment
-        if (state.cycle % 30 === 0) {
-            const segments = ['HY', 'PE', 'PER', 'TRANS', 'WARB', 'KANAL', 'TMPa', 'TMPb', 'TMPg'];
-            const idx = Math.floor(Math.random() * segments.length);
-            updateQuest(segments[idx]);
-        }
-    }
-
-    if (state.cycle % 15 === 0) {
-        document.getElementById('cycle-display').textContent = `QUEST ${state.cycle}`;
-    }
-
-    requestAnimationFrame(render);
+    const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) break;
+    repos.push(...data);
+    if (data.length < 100) break;
+    page++;
+    if (page > 20) break; // Sicherheitsgrenze (2000 Repos)
+  }
+  return repos;
 }
-render();
 
-// ============================================================
-// 7. ZEICHEN-FUNKTIONEN
-// ============================================================
+async function loadRepos() {
+  const user = document.getElementById('inputUser').value.trim();
+  const token = document.getElementById('inputToken').value.trim();
+  if (!user) { log('⚠️ Bitte GitHub-Benutzername eingeben', 'warn'); return; }
 
-function drawTel3() {
-    const tri = state.tri;
-    const quad = state.quad;
-    const r = radius * 0.35;
+  log(`⬇ Lade Repos für "${user}" …`, 'ok');
+  try {
+    const raw = await fetchAllRepos(user, token);
+    state.repos = raw.map(r => ({
+      id: r.full_name,
+      name: r.name,
+      full_name: r.full_name,
+      url: r.html_url,
+      pushed_at: r.pushed_at,
+      open_issues: r.open_issues_count,
+      planned: false
+    }));
+    document.getElementById('ledApi').className = 'led on';
+    log(`✅ ${state.repos.length} Repos geladen`, 'ok');
+  } catch (err) {
+    document.getElementById('ledApi').className = 'led off';
+    log(`❌ ${err.message}`, 'err');
+  }
+  renderAll();
+}
 
-    // 3TEL-Kreis
-    ctx.strokeStyle = 'rgba(255, 215, 61, 0.05)';
-    ctx.lineWidth = 1;
-    ctx.setLineDash([2, 4]);
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.setLineDash([]);
+/* ---------------------------------------------------------------
+   5. AMPEL: Status-Berechnung
+   --------------------------------------------------------------- */
+function daysSince(dateStr) {
+  if (!dateStr) return Infinity;
+  return (Date.now() - new Date(dateStr).getTime()) / 86400000;
+}
 
-    // 3TEL Elemente (3)
-    const colors = ['#ff6b6b', '#6bff6b', '#6b6bff'];
-    tri.forEach((symbol, i) => {
-        const angle = (i / 3) * Math.PI * 2 + state.t * 0.05 - Math.PI / 2;
-        const dist = r * 0.6;
-        const x = cx + Math.cos(angle) * dist;
-        const y = cy + Math.sin(angle) * dist;
+function computeAmpel(repo) {
+  if (state.overrides[repo.id]) return state.overrides[repo.id];
+  if (repo.planned) return 'gelb';
+  const tage = daysSince(repo.pushed_at);
+  if (repo.open_issues > 0) return 'gelb';
+  if (tage <= CONFIG.AMPEL_GRUEN_TAGE) return 'gruen';
+  if (tage <= CONFIG.AMPEL_GELB_TAGE) return 'gelb';
+  return 'rot';
+}
 
-        ctx.strokeStyle = colors[i % colors.length] + '66';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.arc(x, y, 18, 0, Math.PI * 2);
-        ctx.stroke();
+function cycleOverride(repo) {
+  const order = ['gruen', 'gelb', 'rot'];
+  const current = state.overrides[repo.id] || computeAmpel(repo);
+  const next = order[(order.indexOf(current) + 1) % order.length];
+  state.overrides[repo.id] = next;
+  saveOverrides();
+}
 
-        ctx.fillStyle = colors[i % colors.length] + '44';
-        ctx.shadowColor = colors[i % colors.length];
-        ctx.shadowBlur = 10;
-        ctx.beginPath();
-        ctx.arc(x, y, 10, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.shadowBlur = 0;
+/* ---------------------------------------------------------------
+   6. RENDER
+   --------------------------------------------------------------- */
+function allEntries() {
+  const plannedEntries = state.planned.map(p => ({
+    id: p.id, name: p.name, full_name: p.name, url: null,
+    pushed_at: null, open_issues: 0, planned: true
+  }));
+  return [...state.repos, ...plannedEntries];
+}
 
-        ctx.fillStyle = '#fff';
-        ctx.font = '14px Consolas';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(symbol, x, y);
+function filteredEntries() {
+  const q = document.getElementById('inputFilter').value.trim().toLowerCase();
+  const entries = allEntries();
+  if (!q) return entries;
+  return entries.filter(e => e.name.toLowerCase().includes(q));
+}
+
+function renderRepoGrid() {
+  const grid = document.getElementById('repoGrid');
+  const entries = filteredEntries();
+  grid.innerHTML = '';
+  entries.forEach(repo => {
+    const ampel = computeAmpel(repo);
+    const isSelected = state.selected.has(repo.id);
+    const tile = document.createElement('div');
+    tile.className = 'repo-tile' + (isSelected ? ' selected' : '');
+    tile.innerHTML = `
+      <div class="chk">${isSelected ? '✓' : ''}</div>
+      <div class="name"><span class="dot ${ampel}"></span>${repo.name}</div>
+      <div class="meta">${repo.planned ? '<span class="badge-plan">GEPLANT</span>' : (repo.pushed_at ? new Date(repo.pushed_at).toLocaleDateString('de-DE') : '')}${repo.open_issues ? ' · Issues: ' + repo.open_issues : ''}</div>
+      ${repo.url ? `<a href="${repo.url}" target="_blank" rel="noopener">auf GitHub öffnen</a>` : ''}
+    `;
+    tile.addEventListener('click', (e) => {
+      if (e.target.tagName === 'A') return;
+      toggleSelected(repo);
     });
-
-    // 4TEL Element (◎) – Zentrum
-    ctx.fillStyle = 'rgba(255, 215, 61, 0.15)';
-    ctx.font = '28px Consolas';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('◎', cx, cy);
-
-    // Verbindungen
-    const centers = tri.map((_, i) => {
-        const angle = (i / 3) * Math.PI * 2 + state.t * 0.05 - Math.PI / 2;
-        return { x: cx + Math.cos(angle) * r * 0.6, y: cy + Math.sin(angle) * r * 0.6 };
+    tile.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      cycleOverride(repo);
+      renderAll();
     });
-    centers.forEach(p => {
-        ctx.strokeStyle = 'rgba(255,215,61,0.05)';
-        ctx.lineWidth = 0.5;
-        ctx.beginPath();
-        ctx.moveTo(cx, cy);
-        ctx.lineTo(p.x, p.y);
-        ctx.stroke();
+    grid.appendChild(tile);
+  });
+  document.getElementById('repoCountLabel').textContent = `${state.repos.length} Repos geladen · ${state.planned.length} geplant`;
+  document.getElementById('footerTotal').textContent = allEntries().length;
+}
+
+function currentTierIndex() {
+  const n = state.selected.size;
+  let idx = -1;
+  CONFIG.TIERS.forEach((t, i) => { if (n >= t) idx = i; });
+  return idx;
+}
+
+function renderTierTrack() {
+  const track = document.getElementById('tierTrack');
+  track.innerHTML = '';
+  const n = state.selected.size;
+  const reachedIdx = currentTierIndex();
+  CONFIG.TIERS.forEach((t, i) => {
+    if (i > 0) {
+      const arrow = document.createElement('span');
+      arrow.className = 'tier-arrow';
+      arrow.textContent = '→';
+      track.appendChild(arrow);
+    }
+    const step = document.createElement('div');
+    let cls = 'tier-step';
+    if (i <= reachedIdx) cls += ' reached';
+    if (i === reachedIdx + 1 || (reachedIdx === -1 && i === 0)) cls += ' current';
+    step.className = cls;
+    step.innerHTML = `<span class="num">${t}</span>Stufe ${i + 1}`;
+    step.title = `Klick: Top ${t} Repos (neueste zuerst) auswählen`;
+    step.addEventListener('click', () => selectTopN(t));
+    track.appendChild(step);
+  });
+
+  const info = document.getElementById('tierInfo');
+  if (reachedIdx === CONFIG.TIERS.length - 1) {
+    info.textContent = `${n} ausgewählt · höchste Stufe (729) erreicht`;
+  } else {
+    const nextTier = CONFIG.TIERS[reachedIdx + 1];
+    info.textContent = `${n} ausgewählt · noch ${nextTier - n} bis Stufe "${nextTier}"`;
+  }
+  document.getElementById('footerTier').textContent = reachedIdx >= 0 ? CONFIG.TIERS[reachedIdx] : '–';
+}
+
+function renderQuickSelect() {
+  const wrap = document.getElementById('quickSelect');
+  wrap.innerHTML = '';
+  CONFIG.TIERS.forEach(t => {
+    const btn = document.createElement('button');
+    btn.className = 'tier';
+    btn.textContent = `Top ${t}`;
+    btn.title = `Die ${t} zuletzt gepushten Repos auswählen`;
+    btn.addEventListener('click', () => selectTopN(t));
+    wrap.appendChild(btn);
+  });
+}
+
+function renderBoardList() {
+  const list = document.getElementById('boardList');
+  const entries = allEntries();
+  const byId = new Map(entries.map(e => [e.id, e]));
+  list.innerHTML = '';
+  [...state.selected].forEach(id => {
+    const repo = byId.get(id);
+    const chip = document.createElement('div');
+    chip.className = 'board-chip';
+    const label = repo ? repo.name : id;
+    chip.innerHTML = `<span>${repo && repo.planned ? '🕓 ' : '🔗 '}${label}</span><button class="rm" title="entfernen">✕</button>`;
+    chip.querySelector('.rm').addEventListener('click', () => {
+      state.selected.delete(id);
+      saveSelected();
+      renderAll();
     });
-
-    // Label
-    ctx.fillStyle = '#666';
-    ctx.font = '4px Consolas';
-    ctx.textBaseline = 'top';
-    ctx.fillText('3TEL → 4TEL', cx, cy + 36);
+    list.appendChild(chip);
+  });
+  document.getElementById('boardCountLabel').textContent = `${state.selected.size} im Board`;
+  document.getElementById('footerSelected').textContent = state.selected.size;
+  document.getElementById('ledBoard').className = 'led ' + (state.selected.size > 0 ? 'on' : 'off');
 }
 
-function drawNumbers() {
-    const numbers = state.numbers;
-    const r = radius * 0.55;
-
-    if (numbers.length === 0) return;
-
-    ctx.fillStyle = 'rgba(255,255,255,0.02)';
-    ctx.fillRect(8, 8, 200, 16 + numbers.length * 10);
-
-    ctx.fillStyle = '#ff6b6b66';
-    ctx.font = '5px Consolas';
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'top';
-    ctx.fillText(`🔢 Zahlen: ${numbers.join(', ')}`, 12, 10);
-
-    // Summe
-    const sum = numbers.reduce((a, b) => a + b, 0);
-    ctx.fillStyle = '#ffd93d66';
-    ctx.fillText(`Summe: ${sum}`, 12, 22);
-
-    // Prozente
-    if (numbers.length > 0) {
-        const total = numbers.reduce((a, b) => a + b, 0);
-        numbers.forEach((n, i) => {
-            const pct = (n / total * 100).toFixed(1);
-            ctx.fillStyle = `rgba(255,215,61,${0.1 + 0.1 * (i / numbers.length)})`;
-            ctx.fillText(`${n} = ${pct}%`, 12, 34 + i * 10);
-        });
-    }
-
-    // Extraktions-Balken
-    const barX = 12, barY = 34 + numbers.length * 10;
-    const barW = 80, barH = 4;
-    ctx.fillStyle = '#1a1a2a';
-    ctx.fillRect(barX, barY, barW, barH);
-    const pct = Math.min(1, numbers.length / 9);
-    ctx.fillStyle = '#ffd93d';
-    ctx.fillRect(barX, barY, barW * pct, barH);
-    ctx.fillStyle = '#666';
-    ctx.font = '4px Consolas';
-    ctx.fillText(`${(pct * 100).toFixed(0)}% extrahiert`, barX + 84, barY - 1);
+function renderAll() {
+  renderRepoGrid();
+  renderTierTrack();
+  renderQuickSelect();
+  renderBoardList();
 }
 
-function drawGeoPhysik() {
-    const geo = state.geo;
-    const phys = state.phys;
-    const r = radius * 0.55;
-
-    // GEO-Werte
-    ctx.fillStyle = 'rgba(255,255,255,0.02)';
-    ctx.fillRect(W - 140, 8, 132, 50);
-
-    ctx.fillStyle = '#ff6b6b66';
-    ctx.font = '4px Consolas';
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'top';
-    ctx.fillText(`α=${geo.alpha} β=${geo.beta} γ=${geo.gamma} δ=${geo.delta}`, W - 136, 10);
-
-    ctx.fillStyle = '#6b6bff66';
-    ctx.fillText(`E=${phys.energie.toFixed(1)} I=${phys.impuls.toFixed(1)}`, W - 136, 22);
-
-    ctx.fillStyle = '#6bff6b66';
-    ctx.fillText(`F=${phys.feld.toFixed(1)} Z=${phys.zentrumskraft.toFixed(1)}`, W - 136, 34);
-
-    // Energie-Balken
-    const maxE = 8000;
-    const pct = Math.min(1, phys.energie / maxE);
-    ctx.fillStyle = '#1a1a2a';
-    ctx.fillRect(W - 136, 46, 100, 3);
-    ctx.fillStyle = '#ff6b6b';
-    ctx.fillRect(W - 136, 46, 100 * pct, 3);
+/* ---------------------------------------------------------------
+   7. STEUERUNG
+   --------------------------------------------------------------- */
+function toggleSelected(repo) {
+  if (state.selected.has(repo.id)) {
+    state.selected.delete(repo.id);
+    log(`➖ ${repo.name} aus Workboard entfernt`);
+  } else {
+    state.selected.add(repo.id);
+    log(`➕ ${repo.name} ins Workboard aufgenommen`, 'ok');
+  }
+  saveSelected();
+  renderAll();
 }
 
-function drawRespo() {
-    const val = state.respo;
-    const coreRadius = 3 + val * 10;
-
-    const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, coreRadius + 10);
-    glow.addColorStop(0, `rgba(108, 204, 255, ${0.1 + val * 0.2})`);
-    glow.addColorStop(1, 'rgba(108, 204, 255, 0)');
-    ctx.fillStyle = glow;
-    ctx.beginPath();
-    ctx.arc(cx, cy, coreRadius + 10, 0, Math.PI * 2);
-    ctx.fill();
-
-    const coreGrad = ctx.createRadialGradient(cx - 2, cy - 2, 0, cx, cy, coreRadius);
-    coreGrad.addColorStop(0, `rgba(108, 204, 255, ${0.4 + val * 0.4})`);
-    coreGrad.addColorStop(0.7, `rgba(60, 180, 220, ${0.2 + val * 0.3})`);
-    coreGrad.addColorStop(1, `rgba(40, 120, 180, ${0.1 + val * 0.2})`);
-    ctx.fillStyle = coreGrad;
-    ctx.shadowColor = '#6cf';
-    ctx.shadowBlur = 6 + val * 10;
-    ctx.beginPath();
-    ctx.arc(cx, cy, coreRadius, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.shadowBlur = 0;
-
-    ctx.fillStyle = '#000';
-    ctx.font = `bold ${4 + val * 4}px Consolas`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('◈', cx, cy);
-
-    ctx.fillStyle = `rgba(255, 255, 255, ${0.1 + val * 0.2})`;
-    ctx.font = '4px Consolas';
-    ctx.textBaseline = 'top';
-    ctx.fillText(`φ = ${state.respo.toFixed(3)}`, cx, cy + coreRadius + 4);
+function selectTopN(n) {
+  const entries = allEntries().slice().sort((a, b) => {
+    // geplante Repos (kein Datum) zählen als "neu" ans Ende der Sortierung nach Datum,
+    // aber vor sehr alten Repos einsortiert (Mitte)
+    const da = a.pushed_at ? new Date(a.pushed_at).getTime() : -1;
+    const db = b.pushed_at ? new Date(b.pushed_at).getTime() : -1;
+    return db - da;
+  });
+  state.selected = new Set(entries.slice(0, n).map(e => e.id));
+  saveSelected();
+  log(`🌀 Stufe ausgewählt: Top ${n} Repos (neueste zuerst) ins Workboard`, 'ok');
+  renderAll();
 }
 
-function drawSynQuant() {
-    const syn = state.syn;
-    const quant = state.quant;
-    const r = radius * 0.06;
-
-    const sx = cx - r * 0.6;
-    const sy = cy + r * 0.15;
-    ctx.fillStyle = `rgba(255, 107, 107, ${0.1 + syn * 0.2})`;
-    ctx.shadowColor = '#ff6b6b';
-    ctx.shadowBlur = 2 + syn * 4;
-    ctx.beginPath();
-    ctx.arc(sx, sy, 1 + syn * 3, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.shadowBlur = 0;
-    ctx.fillStyle = `rgba(255, 107, 107, ${0.1 + syn * 0.2})`;
-    ctx.font = '3px Consolas';
-    ctx.textAlign = 'center';
-    ctx.fillText(`SYN ${(syn * 100).toFixed(0)}%`, sx, sy - 6);
-
-    const qx = cx + r * 0.6;
-    const qy = cy + r * 0.15;
-    ctx.fillStyle = `rgba(107, 107, 255, ${0.1 + quant * 0.2})`;
-    ctx.shadowColor = '#6b6bff';
-    ctx.shadowBlur = 2 + quant * 4;
-    ctx.beginPath();
-    ctx.arc(qx, qy, 1 + quant * 3, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.shadowBlur = 0;
-    ctx.fillStyle = `rgba(107, 107, 255, ${0.1 + quant * 0.2})`;
-    ctx.fillText(`QUANT ${(quant * 100).toFixed(0)}%`, qx, qy - 6);
+function addPlanned() {
+  const input = document.getElementById('inputPlan');
+  const name = input.value.trim();
+  if (!name) return;
+  const id = 'geplant:' + name;
+  if (state.planned.some(p => p.id === id)) {
+    log(`⚠️ "${name}" ist bereits als geplant vorhanden`, 'warn');
+    return;
+  }
+  state.planned.push({ id, name });
+  savePlanned();
+  input.value = '';
+  log(`🕓 Geplantes Repo "${name}" hinzugefügt`, 'ok');
+  renderAll();
 }
 
-// ============================================================
-// 8. CONTROLS
-// ============================================================
-document.getElementById('btn-start').addEventListener('click', function() {
-    state.running = !state.running;
-    this.textContent = state.running ? '⏸ STOP' : '▶ START';
-    document.getElementById('state-display').textContent = state.running ? '● läuft' : '● gestoppt';
-    document.getElementById('state-display').style.color = state.running ? 'var(--gold)' : '#666';
-    log(state.running ? '▶ QUEST gestartet' : '⏸ QUEST gestoppt', 'ok');
-});
-
-document.getElementById('btn-quest').addEventListener('click', function() {
-    const segments = ['HY', 'PE', 'PER', 'TRANS', 'WARB', 'KANAL', 'TMPa', 'TMPb', 'TMPg'];
-    const idx = Math.floor(Math.random() * segments.length);
-    updateQuest(segments[idx]);
-    log(`🔢 QUEST: ${segments[idx]} | Summe: ${state.quest}`, 'num');
-});
-
-document.getElementById('btn-reset').addEventListener('click', function() {
-    state.running = false;
-    state.paused = false;
-    state.cycle = 0;
-    state.t = 0;
-    state.syn = 0.5;
-    state.quant = 0.5;
-    state.respo = 0.5;
-    state.quest = 0;
-    updateQuest('PER');
-    document.getElementById('btn-start').textContent = '▶ START';
-    document.getElementById('state-display').textContent = '● reset';
-    document.getElementById('state-display').style.color = '#f44';
-    document.getElementById('cycle-display').textContent = 'QUEST 0';
-    log('⟲ RESET — QUEST zurückgesetzt', 'ok');
-});
-
-document.getElementById('btn-auto').addEventListener('click', function() {
-    state.autoMode = !state.autoMode;
-    this.textContent = state.autoMode ? '⏸ PAUSE' : '▶ AUTO';
-    if (state.autoMode) {
-        log('▶ AUTO · QUEST wechselt', 'ok');
-        state.running = true;
-        document.getElementById('btn-start').textContent = '⏸ STOP';
-        document.getElementById('state-display').textContent = '● auto';
-        document.getElementById('state-display').style.color = 'var(--gold)';
-        if (window.autoInterval) clearInterval(window.autoInterval);
-        window.autoInterval = setInterval(function() {
-            state.cycle++;
-            document.getElementById('cycle-display').textContent = `QUEST ${state.cycle}`;
-            const segments = ['HY', 'PE', 'PER', 'TRANS', 'WARB', 'KANAL', 'TMPa', 'TMPb', 'TMPg'];
-            const idx = Math.floor(Math.random() * segments.length);
-            updateQuest(segments[idx]);
-            log(`🔄 Zyklus ${state.cycle}: ${segments[idx]} | Summe: ${state.quest}`, 'num');
-        }, 4000);
-    } else {
-        clearInterval(window.autoInterval);
-        log('⏸ AUTO pausiert', 'ok');
-        document.getElementById('state-display').textContent = '● pausiert';
-        document.getElementById('state-display').style.color = '#ff4';
-    }
-});
-
-// ============================================================
-// 9. TASTATUR
-// ============================================================
-document.addEventListener('keydown', function(e) {
-    if (e.key === ' ') { e.preventDefault(); document.getElementById('btn-start').click(); }
-    if (e.key === 'q' || e.key === 'Q') document.getElementById('btn-quest').click();
-    if (e.key === 'x' || e.key === 'X') document.getElementById('btn-reset').click();
-    if (e.key === 'a' || e.key === 'A') document.getElementById('btn-auto').click();
-});
-
-// ============================================================
-// 10. UHR
-// ============================================================
-function updateClock() {
-    document.getElementById('clock').textContent = '⏱️ ' + new Date().toLocaleTimeString();
+function exportBoard() {
+  const entries = allEntries();
+  const byId = new Map(entries.map(e => [e.id, e]));
+  const lines = [...state.selected].map(id => {
+    const r = byId.get(id);
+    if (!r) return id;
+    return r.planned ? `🕓 ${r.name} (geplant)` : `🔗 ${r.name}${r.url ? ' — ' + r.url : ''}`;
+  });
+  const text = lines.join('\n');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(
+      () => log('📋 Board-Liste in Zwischenablage kopiert', 'ok'),
+      () => log('⚠️ Kopieren fehlgeschlagen — bitte manuell markieren', 'warn')
+    );
+  } else {
+    log('⚠️ Zwischenablage nicht verfügbar in diesem Browser', 'warn');
+  }
 }
-setInterval(updateClock, 1000);
-updateClock();
 
-// ============================================================
-// 11. INIT
-// ============================================================
-log('◈ 3TEL · QUEST · EXTRAKTOR geladen', 'ok');
-log('🔢 Alle Zahlen aus 9 Segmenten extrahierbar', 'num');
-log('⌨️  space=Start  q=Quest  x=Reset  a=Auto', 'ok');
+function clearBoard() {
+  state.selected = new Set();
+  saveSelected();
+  log('⟲ Workboard-Auswahl geleert');
+  renderAll();
+}
 
-console.log('◈ 3TEL · QUEST · EXTRAKTOR');
-console.log('🔢 9 Segmente: HY, PE, PER, TRANS, WARB, KANAL, TMPa, TMPb, TMPg');
-console.log('⌨️  space=Start  q=Quest  x=Reset  a=Auto');
+/* ---------------------------------------------------------------
+   8. LOG
+   --------------------------------------------------------------- */
+function log(msg, type = '') {
+  const box = document.getElementById('logBox');
+  const time = new Date().toLocaleTimeString('de-DE');
+  const cls = ['ok', 'warn', 'err'].includes(type) ? type : '';
+  const entry = document.createElement('div');
+  entry.className = 'entry';
+  entry.innerHTML = `<span class="time">[${time}]</span> <span class="msg ${cls}">${msg}</span>`;
+  box.appendChild(entry);
+  box.scrollTop = box.scrollHeight;
+  while (box.children.length > CONFIG.LOG_MAX) box.removeChild(box.firstChild);
+}
 
-// Initial
-updateQuest('PER');
-setTimeout(function() {
-    state.running = true;
-    document.getElementById('btn-start').textContent = '⏸ STOP';
-    document.getElementById('state-display').textContent = '● läuft';
-    document.getElementById('state-display').style.color = 'var(--gold)';
-    log('▶ QUEST automatisch gestartet', 'ok');
-}, 300);
+/* ---------------------------------------------------------------
+   9. EVENTS & INIT
+   --------------------------------------------------------------- */
+function bindEvents() {
+  document.getElementById('btnLoad').addEventListener('click', loadRepos);
+  document.getElementById('inputFilter').addEventListener('input', renderRepoGrid);
+  document.getElementById('btnAddPlan').addEventListener('click', addPlanned);
+  document.getElementById('inputPlan').addEventListener('keydown', (e) => { if (e.key === 'Enter') addPlanned(); });
+  document.getElementById('btnExport').addEventListener('click', exportBoard);
+  document.getElementById('btnClearBoard').addEventListener('click', clearBoard);
+}
+
+function init() {
+  loadStorage();
+  bindEvents();
+  renderAll();
+  log('🧿 RESPO-Workboard bereit · Klick auf eine Kachel = ins Workboard aufnehmen', 'ok');
+  log('ℹ️ Rechtsklick auf eine Kachel = Ampel-Farbe manuell überschreiben');
+  loadRepos();
+}
+
+init();
 </script>
 </body>
 </html>
